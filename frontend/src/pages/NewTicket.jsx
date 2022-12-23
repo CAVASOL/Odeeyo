@@ -1,15 +1,43 @@
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { createTicket, reset } from '../features/tickets/ticketSlice'
+import Spinner from '../components/Spinner'
 
 function NewTicket() {
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.user)
+  const { isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.ticket
+  )
   const [name] = useState(user.name)
   const [email] = useState(user.email)
   const [product, setProduct] = useState('Magic Copybook Kit')
   const [description, setDescription] = useState('')
 
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess) {
+      dispatch(reset())
+      navigate('/tickets')
+    }
+
+    dispatch(reset())
+  }, [dispatch, navigate, isError, isSuccess, message])
+
   const onSubmit = (e) => {
     e.preventDefault()
+    dispatch(createTicket({ product, description }))
+  }
+
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
