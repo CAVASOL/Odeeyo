@@ -53,7 +53,7 @@ export const getTicket = createAsyncThunk(
   async (ticketId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await ticketService.getTickets(ticketId, token)
+      return await ticketService.getTicket(ticketId, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -125,7 +125,7 @@ export const ticketSlice = createSlice({
       .addCase(getTicket.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.tickets = action.payload
+        state.ticket = action.payload
       })
       .addCase(getTicket.rejected, (state, action) => {
         state.isLoading = false

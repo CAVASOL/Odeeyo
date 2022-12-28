@@ -4,9 +4,6 @@ const User = require('../models/userModel')
 const Note = require('../models/noteModel')
 const Ticket = require('../models/ticketModel')
 
-// @desc get user tickets
-// @route GET /api/tickets/:ticketId/notes
-// @access private
 const getNotes = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id)
 
